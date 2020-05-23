@@ -1,0 +1,47 @@
+import sched, time
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+
+
+def start():
+    indices = ["us-30", "nasdaq-composite", "us-spx-500"]
+
+
+            
+    def get_rsi(tick):
+        page = requests.get('https://www.investing.com/indices/' + tick + "-technical", headers={"user-agent": "Chrome"})
+        soup = BeautifulSoup(page.content, 'html.parser')
+        summary = soup.find(id="techStudiesInnerWrap")
+        name = soup.find("td", class_="first left symbol", string="RSI(14)")
+        value = name.find_next('td')
+        action = value.find_next('td')
+        return  name.text, value.text, action.span.text
+
+    name_list=[]
+    rsi_list=[]
+    action_list=[]
+    
+  
+    
+    for index in indices:
+        name,rsi,action = get_rsi(index)
+        name_list.append(name)
+        rsi_list.append(rsi)
+        action_list.append(action)
+       
+            
+        
+            
+    rsi_action = {"INDEX": indices,"NAME":name_list,"RSI":rsi_list,"ACTION":action_list}
+    df=pd.DataFrame.from_dict(rsi_action, orient='index')
+    print(df.transpose())
+    print("----------------------------------------------------\n")
+    print("----------------------------------------------------\n")
+    
+    
+while True:
+    start()
+    time.sleep(2)
+    
+    
