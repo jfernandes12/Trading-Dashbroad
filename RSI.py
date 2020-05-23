@@ -3,6 +3,15 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
+class bcolors :
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 def start():
     indices = ["us-30", "nasdaq-composite", "us-spx-500"]
@@ -34,8 +43,28 @@ def start():
         
             
     rsi_action = {"INDEX": indices,"NAME":name_list,"RSI":rsi_list,"ACTION":action_list}
-    df=pd.DataFrame.from_dict(rsi_action, orient='index')
-    print(df.transpose())
+    my_rsi = zip(name_list, rsi_list, action_list)
+    for it in my_rsi:
+        n = it[0]
+        r = it[1]
+        p = it[2]
+        if p == "Buy":
+            action_text = f"{bcolors.OKGREEN}{p}{bcolors.ENDC}"
+        elif p == "Sell":
+            action_text = f"{bcolors.WARNING}{p}{bcolors.ENDC}"
+        else:
+            action_text = f"{bcolors.ENDC}{p}{bcolors.ENDC}"
+
+        if float(r) > 70:
+            rsi_txt = f"{bcolors.WARNING}{r}{bcolors.ENDC}"
+        else:
+            rsi_txt = f"{bcolors.OKGREEN}{r}{bcolors.ENDC}"
+
+        print(f"Name: {n} | RSI: {rsi_txt} | Action: {action_text}")
+
+
+    # df=pd.DataFrame.from_dict(rsi_action, orient='index')
+    # print(df.transpose())
     print("----------------------------------------------------\n")
     print("----------------------------------------------------\n")
     
