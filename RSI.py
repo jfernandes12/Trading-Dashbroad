@@ -48,16 +48,23 @@ def start():
         n = it[0]
         r = it[1]
         p = it[2]
+        if p == "Buy":
+            action_text = f"{bcolors.OKGREEN}{p}{bcolors.ENDC}"
+        elif p == "Sell":
+            action_text = f"{bcolors.WARNING}{p}{bcolors.ENDC}"
+        else:
+            action_text = f"{bcolors.ENDC}{p}{bcolors.ENDC}"
+
         if float(r) > 70:
             rsi_txt = f"{bcolors.WARNING}{r}{bcolors.ENDC}"
         else:
             rsi_txt = f"{bcolors.OKGREEN}{r}{bcolors.ENDC}"
 
-        print(f"Name: {n} | RSI: {rsi_txt} | Action: {p}")
+        print(f"Name: {n} | RSI: {rsi_txt} | Action: {action_text}")
 
 
-    df=pd.DataFrame.from_dict(rsi_action, orient='index')
-    print(df.transpose())
+    # df=pd.DataFrame.from_dict(rsi_action, orient='index')
+    # print(df.transpose())
     print("----------------------------------------------------\n")
     print("----------------------------------------------------\n")
     
